@@ -14,9 +14,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>media-store-data</name>
     <description>Data part of Media Store application</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>11</java.version>
+        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
     </properties>
 
     <dependencies>
