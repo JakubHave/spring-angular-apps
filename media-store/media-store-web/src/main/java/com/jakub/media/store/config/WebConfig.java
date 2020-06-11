@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class WebConfig implements WebMvcConfigurer {
 
+    // NOTE: this enables Angular to handle requests instead of Spring Boot
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
