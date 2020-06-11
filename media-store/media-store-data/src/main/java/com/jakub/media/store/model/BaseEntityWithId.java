@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @MappedSuperclass
 @Data
-public class BaseEntity implements Serializable {
+public class BaseEntityWithId implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
