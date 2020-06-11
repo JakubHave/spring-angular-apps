@@ -1,14 +1,30 @@
 package com.jakub.media.store.controllers;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
+@RequestMapping("/api/public")
 public class BaseController {
 
-  //  @RequestMapping({"", "/"})
-  //  public String welcome(){
+    @GetMapping("/all")
+    public String allAccess() {
+        return "Public Content.";
+    }
 
-  //      return "Welcome to Media Store";
-  //  }
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public String userAccess() {
+        return "User Content.";
+    }
 
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminAccess() {
+        return "Admin Board.";
+    }
 }
