@@ -17,6 +17,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>media-store-frontend</module>
         <module>media-store-data</module>
         <module>media-store-web</module>
     </modules>
