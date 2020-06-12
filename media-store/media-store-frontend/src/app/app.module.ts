@@ -9,9 +9,9 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdminSiteComponent } from './admin-site/admin-site.component';
 import { UserSiteComponent } from './user-site/user-site.component';
-import {WINDOW_PROVIDERS} from './window-provider';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {authInterceptorProviders} from './services/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import {HttpClientModule} from '@angular/common/http';
     FormsModule,
     HttpClientModule
   ],
-  providers: [WINDOW_PROVIDERS],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

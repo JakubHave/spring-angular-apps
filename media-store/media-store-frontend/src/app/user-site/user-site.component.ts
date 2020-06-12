@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from '../services/user.service';
 
 @Component({
   selector: 'app-user-site',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserSiteComponent implements OnInit {
 
-  constructor() { }
+  content = '';
+
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.userService.getUserSite().subscribe(
+      data => {
+        this.content = data;
+      },
+      err => {
+        this.content = JSON.parse(err.error).message;
+      }
+    );
   }
 
 }

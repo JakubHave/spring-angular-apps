@@ -1,7 +1,6 @@
 import { Injectable, Inject  } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {WINDOW} from '../window-provider';
 
 const AUTH_API = '/api/auth/';
 
@@ -14,11 +13,7 @@ const httpOptions = {
 })
 export class AuthService {
 
-  hostName: string;
-
-  constructor(private http: HttpClient, @Inject(WINDOW) private window: Window) {
-    this.hostName = this.window.location.hostname;
-  }
+  constructor(private http: HttpClient) {}
 
   login(credentials): Observable<any> {
     return this.http.post(AUTH_API + 'login', {
