@@ -1,6 +1,6 @@
-import {Inject, Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 const PUBLIC_API_URL = '/api/public/';
 
