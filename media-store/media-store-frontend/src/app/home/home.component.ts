@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../services/user.service';
 import {multi} from '../profile/data';
 import {StockService} from '../services/stock.service';
+import {GraphItem} from '../model/graph-item.model';
+import {Stock} from '../model/stock.model';
+import {NameValueItem} from '../model/name-value-item.model';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +19,7 @@ export class HomeComponent implements OnInit {
   content: string;
 
   multi: any[];
-  view: any[] = [700, 300];
+  //view: any[] = [undefined, 500];
 
   // options
   legend = true;
@@ -26,8 +29,8 @@ export class HomeComponent implements OnInit {
   yAxis = true;
   showYAxisLabel = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Year';
-  yAxisLabel = 'Population';
+  xAxisLabel = 'Date';
+  yAxisLabel = 'Price';
   timeline = true;
 
   colorScheme = {
@@ -44,9 +47,17 @@ export class HomeComponent implements OnInit {
       }
     );
 
-    this.stockService.getStock().subscribe( res =>
-      console.log(res)
+    this.stockService.getStock().subscribe( res => {
+        const stock = res as Stock;
+        const series = new Array<NameValueItem>();
+        stock.prices.forEach(price => series.push(new NameValueItem(price.date, price.price)));
+        const graphItem = new GraphItem(stock.symbol, series);
+        console.log(graphItem);
+        this.multi = [];
+        this.multi.push(graphItem);
+      }
     );
+
   }
 
   onSelect(data): void {

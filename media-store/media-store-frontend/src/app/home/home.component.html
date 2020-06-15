@@ -3,8 +3,9 @@
     <p>{{ content }}</p>
   </header>
   <ngx-charts-line-chart
-    [scheme]="colorScheme"
+
     [legend]="legend"
+    [yScaleMin]="0"
     [showXAxisLabel]="showXAxisLabel"
     [showYAxisLabel]="showYAxisLabel"
     [xAxis]="xAxis"
@@ -13,9 +14,6 @@
     [yAxisLabel]="yAxisLabel"
     [timeline]="timeline"
     [results]="multi"
-    (select)="onSelect($event)"
-    (activate)="onActivate($event)"
-    (deactivate)="onDeactivate($event)"
   >
   </ngx-charts-line-chart>
 
