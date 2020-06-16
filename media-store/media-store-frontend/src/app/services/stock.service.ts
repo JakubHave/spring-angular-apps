@@ -5,7 +5,10 @@ import {Stock} from '../model/stock.model';
 import {HistoricPrice} from '../model/hystoric-price.model';
 import {map} from 'rxjs/operators';
 
-const STOCK_API_URL = 'https://www.alphavantage.co/query';
+const CORS_PROXY_URL = 'https://cors-middleman-jakub.herokuapp.com/';
+const STOCK_API_URL = CORS_PROXY_URL + 'https://api.tiingo.com/tiingo/daily/';
+const API_KEY = '7257a4f589d13286aed035ef9d42ff373f2bb280';
+const START_DATE = '2020-1-1';
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +17,30 @@ export class StockService {
 
   constructor(private http: HttpClient) {}
 
-  getStock(): Observable<Stock> {
-    return this.http.get(STOCK_API_URL + 'all',
-      { params: {function: 'TIME_SERIES_DAILY', symbol: 'MSFT', apikey: 'XHAXAVU5SZDIWCH6'} }).pipe( map(
+  getStock(stockSymbolName): Observable<Stock> {
+    return this.http.get(STOCK_API_URL + stockSymbolName + '/prices',
+      { params: {startDate: START_DATE, token: API_KEY}}).pipe( map(
         response => {
-          const symbol = response['Meta Data']['2. Symbol'];
-          const histPrices = response['Time Series (Daily)'];
           const prices = new Array<HistoricPrice>();
-          for (const [date, price] of Object.entries(histPrices)) {
-            prices.unshift(new HistoricPrice(date, parseFloat(price['4. close'])));
-          }
-          return new Stock(symbol, prices);
+          const histPrices = response as [];
+          histPrices.forEach(histPrice => {
+            const dateStr = histPrice[`date`] as string;
+            prices.push(new HistoricPrice(new Date(dateStr.substring(0, dateStr.indexOf('T'))) , parseFloat(histPrice[`close`])));
+          });
+          return new Stock(stockSymbolName, prices);
         }
       )
     );
   }
+
+  getStockInfo(stockSymbolName: string): Observable<string> {
+    return this.http.get(STOCK_API_URL + stockSymbolName,
+      { params: {token: API_KEY} }).pipe( map(
+      response => {
+          return response[`name`];
+        }
+      )
+    );
+  }
+
 }

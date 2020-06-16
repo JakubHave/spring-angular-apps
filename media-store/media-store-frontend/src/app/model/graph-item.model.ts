@@ -1,11 +1,11 @@
 import {NamedObject} from './named-object.model';
-import {NameValueItem} from './name-value-item.model';
+import {DateValueItem} from './date-value-item.model';
 
 export class GraphItem extends NamedObject {
 
-  series: Array<NameValueItem>;
+  series: Array<DateValueItem>;
 
-  constructor(name: string, series: Array<NameValueItem>) {
+  constructor(name: string, series: Array<DateValueItem>) {
     super(name);
     this.series = series;
   }

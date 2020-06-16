@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  text-align: center;
+  background: #00d2ff;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #b0deff, #ddf3f5);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #b0deff, #ddf3f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.jumbotron{
+  background-color: azure;
+}
+
+/* Navbar Section */
+
+.custom-navbar{
+  background-color: #424874;
+  color: #ffffff;
+}
+
+/* Features Section */
+
+#features-section {
+  position: relative;
+  margin: 25px 0px 25px;
+}
+
+.feature-box{
+  padding: 2% 3%;
+}
+
+.feature-title {
+  font-size: 1.5rem;
+}
+
+/* Register - Login Section */
+
+/* Stock Graph and Carousel Section */
+
+.stock-graph-container{
+  width: 100%;
+  height: 400px;
+  background-color: azure;
+  margin: 0;
+  border-radius: 15px;
+}
+.carousel-item {
+  padding: 7% 15% 15%;
+}
+
+.carousel-slide{
+  border-radius: 10px;
+  background-color: #9aceff;
+}
+
+.chart-legend .legend-label{
+  color: white !important;
+}
+
+/* Custom Section*/
+
+.custom-margin-bottom{
+  margin-bottom: 120px;
+}
+
+.custom-footer{
+  position: relative;
+  bottom: 20px;
+}
+

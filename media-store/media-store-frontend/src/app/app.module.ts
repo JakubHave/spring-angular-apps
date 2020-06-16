@@ -14,6 +14,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {authInterceptorProviders} from './services/auth.interceptor';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CarouselModule} from 'ngx-bootstrap/carousel';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     FormsModule,
     HttpClientModule,
     NgxChartsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    CarouselModule.forRoot()
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

@@ -2,11 +2,11 @@
 export class HistoricPrice {
 
   stockSymbol?: string;
-  date: string;
+  date: Date;
   // tslint:disable-next-line:variable-name
   private _price: number;
 
-  constructor(date: string, price: number) {
+  constructor(date: Date, price: number) {
     this.date = date;
     if (price < 0) {
       throw new Error('Price can not be negative number: ' + price);

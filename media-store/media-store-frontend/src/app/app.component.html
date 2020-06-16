@@ -1,6 +1,6 @@
 <div id="app">
-  <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a href="#" class="navbar-brand">Media Store</a>
+  <nav class="navbar navbar-expand-sm navbar-dark custom-navbar">
+    <a href="#" class="navbar-brand">Invest For Fun</a>
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
       <li class="nav-item">
         <a class="nav-link" routerLink="home">Home </a>
@@ -32,7 +32,14 @@
     </ul>
   </nav>
 
-  <div class="container">
+  <div class="container custom-margin-bottom">
     <router-outlet></router-outlet>
   </div>
+
+  <footer>
+    <div class="container-fluid custom-footer">
+      <i class="fab fa-linkedin"></i>
+      <p>© Copyright 2020 Jakub Havelka</p>
+    </div>
+  </footer>
 </div>

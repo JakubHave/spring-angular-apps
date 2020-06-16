@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../services/user.service';
-import {multi} from '../profile/data';
+import {initStockNames} from '../init-data/stock-data';
 import {StockService} from '../services/stock.service';
 import {GraphItem} from '../model/graph-item.model';
 import {Stock} from '../model/stock.model';
-import {NameValueItem} from '../model/name-value-item.model';
+import {DateValueItem} from '../model/date-value-item.model';
 
 @Component({
   selector: 'app-home',
@@ -14,28 +14,31 @@ import {NameValueItem} from '../model/name-value-item.model';
 export class HomeComponent implements OnInit {
 
   constructor(private userService: UserService, private stockService: StockService) {
-    Object.assign(this, { multi });
+    this.initStockNames = initStockNames;
   }
   content: string;
 
-  multi: any[];
-  //view: any[] = [undefined, 500];
+  initStockNames: string[];
+  actualGraphData = [];
+  allGraphData = [];
 
   // options
   legend = true;
   showLabels = true;
   animations = true;
-  xAxis = true;
+  xAxis = false;
   yAxis = true;
   showYAxisLabel = true;
   showXAxisLabel = true;
   xAxisLabel = 'Date';
-  yAxisLabel = 'Price';
-  timeline = true;
+  yAxisLabel = 'Price $';
+  timeline = false;
 
   colorScheme = {
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
+    domain: ['#424874', '#1b6ca8', '#6a197d']
   };
+  showStockGraph = false;
+  graphMessage = 'Loading';
 
   ngOnInit() {
     this.userService.getPublicContent().subscribe(
@@ -47,28 +50,45 @@ export class HomeComponent implements OnInit {
       }
     );
 
-    this.stockService.getStock().subscribe( res => {
-        const stock = res as Stock;
-        const series = new Array<NameValueItem>();
-        stock.prices.forEach(price => series.push(new NameValueItem(price.date, price.price)));
-        const graphItem = new GraphItem(stock.symbol, series);
-        console.log(graphItem);
-        this.multi = [];
-        this.multi.push(graphItem);
-      }
-    );
-
+    this.initAllGraphData(this.initStockNames);
   }
 
-  onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  initAllGraphData(stockNames: string[]) {
+    const tempGraphItems = new Array<GraphItem>();
+    stockNames.forEach( (stockSymbolName, index) => {
+      this.stockService.getStock(stockSymbolName).subscribe( res => {
+          const stock = res as Stock;
+          const series = new Array<DateValueItem>();
+          stock.prices.forEach(price => series.push(new DateValueItem(price.date, price.price)));
+          this.stockService.getStockInfo(stock.symbol).subscribe( resp => {
+              const stockFullName = resp + ' (' + stock.symbol + ') ';
+              const graphItem = new GraphItem(stockFullName, series);
+              tempGraphItems.push(graphItem);
+              if (index === stockNames.length - 1 ) {
+                this.allGraphData = tempGraphItems;
+                this.showStockGraph = true;
+              }
+            }
+          );
+        }, error => {
+          this.graphMessage = 'Sorry, too many requests on Stock Prices Server';
+        }
+      );
+    });
   }
 
-  onActivate(data): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
+  slideChanged(event: number) {
+    let lastStockIndex = 0;
+    if (event === 0) {
+      lastStockIndex = 3;
+    } else if (event === 1) {
+      lastStockIndex = 6;
+    } else {
+      lastStockIndex = 9;
+    }
 
-  onDeactivate(data): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+    if (this.allGraphData.length > 0) {
+      this.actualGraphData = this.allGraphData.slice(lastStockIndex - 3, lastStockIndex);
+    }
   }
 }

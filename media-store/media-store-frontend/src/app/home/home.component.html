@@ -1,20 +1,131 @@
-<div class="container">
+<div class="container mb-5" >
   <header class="jumbotron">
-    <p>{{ content }}</p>
+    <h2>Welcome to Invest For Fun</h2>
+    <p>Let`s boost your your stock trading skills</p>
   </header>
-  <ngx-charts-line-chart
 
-    [legend]="legend"
-    [yScaleMin]="0"
-    [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel"
-    [xAxis]="xAxis"
-    [yAxis]="yAxis"
-    [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel"
-    [timeline]="timeline"
-    [results]="multi"
-  >
-  </ngx-charts-line-chart>
+  <section id="features-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="feature-box col-lg-4">
+          <i class="icon fas fa-check-circle fa-4x"></i>
+          <h3 class="feature-title">Easy to use.</h3>
+          <p>Easy to use for stock trading beginners as well as masters</p>
+        </div>
 
+        <div class="feature-box col-lg-4">
+          <i class="icon fas fa-chart-bar fa-4x"></i>
+          <h3 class="feature-title">Nice graphical illustrations</h3>
+          <p>Stock prices graphs help you better decide on your investing strategy</p>
+        </div>
+
+        <div class="feature-box col-lg-4">
+          <i class="icon fas fa-running fa-4x"></i>
+          <h3 class="feature-title">Train your skills</h3>
+          <p>Helps you sharpen you investing skills and trading intuition</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="carousel-section">
+    <carousel [isAnimated]="true" [interval]="3000" (activeSlideChange)="slideChanged($event)">
+      <slide class="carousel-slide">
+        <div *ngIf="!showStockGraph">
+          <h4 class="text-center"> {{graphMessage}}  <span class="fas fa-sync fa-spin ml-3" ></span> </h4>
+        </div>
+        <div *ngIf="showStockGraph" class="stock-graph-container">
+          <ngx-charts-line-chart
+            [scheme]="colorScheme"
+            [legend]="legend"
+            [legendPosition]="'bottom'"
+            [legendTitle]="'Stock Names'"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxis]="xAxis"
+            [yAxis]="yAxis"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [timeline]="timeline"
+            [results]="actualGraphData"
+          >
+          </ngx-charts-line-chart>
+        </div>
+      </slide>
+      <slide  class="carousel-slide">
+        <div *ngIf="showStockGraph" class="stock-graph-container">
+          <ngx-charts-line-chart
+            [scheme]="colorScheme"
+            [legend]="legend"
+            [legendPosition]="'bottom'"
+            [legendTitle]="'Stock Names'"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxis]="xAxis"
+            [yAxis]="yAxis"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [timeline]="timeline"
+            [results]="actualGraphData"
+          >
+          </ngx-charts-line-chart>
+        </div>
+      </slide>
+      <slide class="carousel-slide">
+        <div *ngIf="showStockGraph" class="stock-graph-container">
+          <ngx-charts-line-chart
+            [scheme]="colorScheme"
+            [legend]="legend"
+            [legendPosition]="'bottom'"
+            [legendTitle]="'Stock Names'"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxis]="xAxis"
+            [yAxis]="yAxis"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [timeline]="timeline"
+            [results]="actualGraphData"
+          >
+          </ngx-charts-line-chart>
+        </div>
+      </slide>
+    </carousel>
+  </section>
+
+  <section id="register-login-section" class="mt-5">
+
+    <h2 class="section-heading">Interested?</h2>
+    <p>Go ahead and register yourself if you are new to Invest For Fun, or login if you already have an account.</p>
+
+    <div class="row pr-5 pl-5 mt-5">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3>Register</h3>
+          </div>
+          <div class="card-body">
+            <h2 class="price-text">Free</h2>
+            <p>No credit card registration needed</p>
+            <p>Invest with virtual money</p>
+            <p>Unlimited access</p>
+            <button class="btn btn-lg btn-block btn-dark" type="button">Sign Up</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3>Login</h3>
+          </div>
+          <div class="card-body">
+            <h2 class="price-text">Welcome back</h2>
+            <p>Let`s see what is new in a world of stock markets</p>
+            <button class="btn btn-lg btn-block btn-outline-dark" type="button">Sign in</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
 </div>
