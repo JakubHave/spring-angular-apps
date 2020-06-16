@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {TokenStorageService} from '../services/token-storage.service';
+import {FormBuilder, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,13 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  userForm = this.formBuilder.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required]
+  });
+
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService,
+              private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     if (this.tokenStorage.getToken()) {
@@ -24,7 +31,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.authService.login(this.form).subscribe(
+    this.authService.login(this.userForm).subscribe(
       data => {
         this.tokenStorage.saveToken(data.token);
         this.tokenStorage.saveUser(data);

@@ -1,8 +1,24 @@
 body {
   text-align: center;
-  background: #00d2ff;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #b0deff, #ddf3f5);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #b0deff, #ddf3f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #ddf3f5;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #ddf3f5, #b0deff, #ddf3f5);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #ddf3f5, #b0deff, #ddf3f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 4rem;    /* Footer height */
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 4rem;            /* Footer height */
 }
 
 .jumbotron{
@@ -42,13 +58,23 @@ body {
   margin: 0;
   border-radius: 15px;
 }
+
+.carousel-control-next,
+.carousel-control-prev {
+  filter: invert(100%);
+}
+
+.carousel-indicators li{
+  background-color: #424874;
+}
+
 .carousel-item {
   padding: 7% 15% 15%;
 }
 
 .carousel-slide{
   border-radius: 10px;
-  background-color: #9aceff;
+  background-color: azure;
 }
 
 .chart-legend .legend-label{
@@ -61,8 +87,33 @@ body {
   margin-bottom: 120px;
 }
 
-.custom-footer{
-  position: relative;
-  bottom: 20px;
+/* Register and Login form*/
+
+.form-login-register {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
 }
 
+.form-login-register .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.form-login-register .form-control:focus {
+  z-index: 2;
+}
+
+.success-div{
+  min-height: 150px;
+  background-color: #9bdeac;
+}
+
+.azure-background{
+  background-color: azure;
+}

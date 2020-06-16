@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
       }
     );
 
-    this.initAllGraphData(this.initStockNames);
+    // this.initAllGraphData(this.initStockNames);
   }
 
   initAllGraphData(stockNames: string[]) {

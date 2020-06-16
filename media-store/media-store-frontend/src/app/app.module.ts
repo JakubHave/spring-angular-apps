@@ -9,7 +9,7 @@ import {HomeComponent} from './home/home.component';
 import {ProfileComponent} from './profile/profile.component';
 import {AdminSiteComponent} from './admin-site/admin-site.component';
 import {UserSiteComponent} from './user-site/user-site.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {authInterceptorProviders} from './services/auth.interceptor';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
@@ -30,6 +30,7 @@ import {CarouselModule} from 'ngx-bootstrap/carousel';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     NgxChartsModule,
     BrowserAnimationsModule,
