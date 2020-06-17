@@ -5,6 +5,7 @@ import {StockService} from '../services/stock.service';
 import {GraphItem} from '../model/graph-item.model';
 import {Stock} from '../model/stock.model';
 import {DateValueItem} from '../model/date-value-item.model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,8 @@ import {DateValueItem} from '../model/date-value-item.model';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private userService: UserService, private stockService: StockService) {
+  constructor(private userService: UserService, private stockService: StockService,
+              private toastr: ToastrService) {
     this.initStockNames = initStockNames;
   }
   content: string;
@@ -41,15 +43,6 @@ export class HomeComponent implements OnInit {
   graphMessage = 'Loading';
 
   ngOnInit() {
-    this.userService.getPublicContent().subscribe(
-      data => {
-        this.content = data;
-      },
-      err => {
-        this.content = JSON.parse(err.error).message;
-      }
-    );
-
     this.initAllGraphData(this.initStockNames);
   }
 
@@ -71,6 +64,7 @@ export class HomeComponent implements OnInit {
             }
           );
         }, error => {
+          this.toastr.error('Sorry, too many requests on Stock Prices Server', 'Error');
           this.graphMessage = 'Sorry, too many requests on Stock Prices Server';
         }
       );

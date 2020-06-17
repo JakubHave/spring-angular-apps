@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {FormBuilder, Validators} from '@angular/forms';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,6 @@ export class RegisterComponent implements OnInit {
 
   form: any = {};
   isSuccessful = false;
-  isSignUpFailed = false;
   errorMessage = '';
   userForm = this.formBuilder.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
@@ -19,7 +19,8 @@ export class RegisterComponent implements OnInit {
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) { }
+  constructor(private authService: AuthService, private formBuilder: FormBuilder,
+              private toastr: ToastrService) { }
 
   ngOnInit() {
   }
@@ -29,11 +30,10 @@ export class RegisterComponent implements OnInit {
       data => {
         console.log(data);
         this.isSuccessful = true;
-        this.isSignUpFailed = false;
       },
       err => {
         this.errorMessage = err.error.message;
-        this.isSignUpFailed = true;
+        this.toastr.error(this.errorMessage, 'Error');
       }
     );
   }

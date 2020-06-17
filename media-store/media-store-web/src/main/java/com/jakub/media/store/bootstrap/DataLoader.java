@@ -22,12 +22,19 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Role userRole = new Role();
-        userRole.setName(RoleEnum.ROLE_USER);
-        roleRepository.saveAndFlush(userRole);
+        // NOTE: create roles if they do not exist
+        Role userRole = roleRepository.findByName(RoleEnum.ROLE_USER).orElse(null);
+        if(userRole == null) {
+            userRole = new Role();
+            userRole.setName(RoleEnum.ROLE_USER);
+            roleRepository.saveAndFlush(userRole);
+        }
 
-        Role adminRole = new Role();
-        adminRole.setName(RoleEnum.ROLE_ADMIN);
-        roleRepository.saveAndFlush(adminRole);
+        Role adminRole = roleRepository.findByName(RoleEnum.ROLE_ADMIN).orElse(null);
+        if(adminRole == null) {
+            adminRole = new Role();
+            adminRole.setName(RoleEnum.ROLE_ADMIN);
+            roleRepository.saveAndFlush(adminRole);
+        }
     }
 }

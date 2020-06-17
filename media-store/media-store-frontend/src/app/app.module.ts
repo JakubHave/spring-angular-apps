@@ -15,6 +15,7 @@ import {authInterceptorProviders} from './services/auth.interceptor';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CarouselModule} from 'ngx-bootstrap/carousel';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {CarouselModule} from 'ngx-bootstrap/carousel';
     HttpClientModule,
     NgxChartsModule,
     BrowserAnimationsModule,
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
