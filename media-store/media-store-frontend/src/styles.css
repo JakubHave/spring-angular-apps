@@ -110,8 +110,10 @@ body {
 }
 
 .success-div{
-  min-height: 150px;
-  background-color: #9bdeac;
+  padding-top: 3%;
+  min-height: 250px;
+  color: #009926;
+  background-color: azure;
 }
 
 .azure-background{

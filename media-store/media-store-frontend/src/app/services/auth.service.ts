@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 
 const AUTH_API = '/api/auth/';
 const ADMIN_NAME = 'aaa';
-const ADMIN_EMAIL = 'a@a';
+const ADMIN_EMAIL = 'a@a.a';
 const ADMIN_PASSWORD = 'aaaaaa';
 
 const httpOptions = {

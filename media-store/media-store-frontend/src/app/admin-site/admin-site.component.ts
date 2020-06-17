@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '../services/user.service';
+import {User} from '../model/user.model';
 
 @Component({
   selector: 'app-admin-site',
@@ -9,6 +10,7 @@ import {UserService} from '../services/user.service';
 export class AdminSiteComponent implements OnInit {
 
   content = '';
+  allUsers = new Array<User>();
 
   constructor(private userService: UserService) { }
 
@@ -19,6 +21,23 @@ export class AdminSiteComponent implements OnInit {
       },
       err => {
         this.content = JSON.parse(err.error).message;
+      }
+    );
+
+    this.userService.getAllUsers().subscribe(
+      res => {
+        this.allUsers = res;
+        console.log(res);
+      }
+    );
+  }
+
+  removeUser(user: User) {
+    this.userService.removeUser(user).subscribe(
+      res => {
+        this.allUsers = this.allUsers.filter(item => item.name !== user.name);
+      }, err => {
+        console.log(err);
       }
     );
   }

@@ -1,6 +1,9 @@
 
 export abstract class NamedObject {
 
-  constructor(public name?: string) {
+  name: string;
+
+  protected constructor(name?: string) {
+    this.name = name;
   }
 }

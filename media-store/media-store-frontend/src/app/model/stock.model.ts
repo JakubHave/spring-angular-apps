@@ -9,6 +9,6 @@ export class Stock extends NamedObject {
   }
 
   symbol: string;
-  name?: string;
+  name: string;
   prices: Array<HistoricPrice>;
 }

@@ -2,4 +2,24 @@
   <header class="jumbotron">
     <p>{{ content }}</p>
   </header>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Remove User</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let user of allUsers">
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td><span class="remove fas fa-times" (click)="removeUser(user)" role="button"></span></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

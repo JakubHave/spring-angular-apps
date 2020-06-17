@@ -21,7 +21,7 @@ import java.util.Set;
 public class User extends BaseEntityWithId {
 
     @NotBlank
-    @Size(max = 30)
+    @Size(min = 3, max = 30)
     private String name;
 
     @NotBlank
@@ -30,7 +30,7 @@ public class User extends BaseEntityWithId {
     private String email;
 
     @NotBlank
-    @Size(max = 120)
+    @Size(min = 6, max = 120)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
