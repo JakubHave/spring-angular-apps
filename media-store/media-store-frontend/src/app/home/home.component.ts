@@ -47,14 +47,51 @@ export class HomeComponent implements OnInit {
   }
 
   initAllGraphData(stockNames: string[]) {
-    const tempGraphItems = new Array<GraphItem>();
-    stockNames.forEach( (stockSymbolName, index) => {
-      this.stockService.getStock(stockSymbolName).subscribe( res => {
-          const stock = res as Stock;
+
+
+    this.stockService.areStocksUpdated().subscribe(
+      res => {
+        if (res) {
+          this.loadStocksFromDB(stockNames);
+        } else {
+          this.loadStocksFromExtAndUpdate(stockNames);
+        }
+      }
+    );
+  }
+
+  private loadStocksFromDB(stockNames: string[]) {
+    this.stockService.getStocksByNameFromDB(stockNames).subscribe(
+      res => {
+        const tempGraphItems = new Array<GraphItem>();
+        res.forEach((stock, index) => {
           const series = new Array<DateValueItem>();
           stock.prices.forEach(price => series.push(new DateValueItem(price.date, price.price)));
-          this.stockService.getStockInfo(stock.symbol).subscribe( resp => {
-              const stockFullName = resp + ' (' + stock.symbol + ') ';
+          const graphItem = new GraphItem(stock.name, series);
+          tempGraphItems.push(graphItem);
+          if (index === res.length - 1 ) {
+            this.allGraphData = tempGraphItems;
+            this.showStockGraph = true;
+          }
+        });
+      }
+    );
+  }
+
+  private loadStocksFromExtAndUpdate(stockNames: string[]) {
+    const tempGraphItems = new Array<GraphItem>();
+    stockNames.forEach( (stockSymbolName, index) => {
+      this.stockService.getStock(stockSymbolName).subscribe( res2 => {
+          const stock = res2 as Stock;
+          const series = new Array<DateValueItem>();
+          stock.prices.forEach(price => series.push(new DateValueItem(price.date, price.price)));
+          this.stockService.getStockInfo(stock.symbol).subscribe( res3 => {
+              const stockFullName = res3 + ' (' + stock.symbol + ') ';
+
+              // NOTE: update stock in DB
+              stock.name = stockFullName;
+              this.stockService.updateStock(stock).subscribe(res => console.log(res));
+
               const graphItem = new GraphItem(stockFullName, series);
               tempGraphItems.push(graphItem);
               if (index === stockNames.length - 1 ) {
@@ -65,7 +102,7 @@ export class HomeComponent implements OnInit {
           );
         }, error => {
           this.toastr.error('Sorry, too many requests on Stock Prices Server', 'Error');
-          this.graphMessage = 'Sorry, too many requests on Stock Prices Server';
+          this.graphMessage = 'No data available';
         }
       );
     });
