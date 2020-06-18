@@ -1,3 +1,5 @@
+/* Common section */
+
 body {
   text-align: center;
   background: #ddf3f5;  /* fallback for old browsers */
@@ -25,6 +27,11 @@ body {
   background-color: azure;
 }
 
+.site-heading{
+  padding: 2% 0 2%;
+  border-radius: 5px;
+}
+
 /* Navbar Section */
 
 .custom-navbar{
@@ -32,7 +39,7 @@ body {
   color: #ffffff;
 }
 
-/* Features Section */
+/* Home-welcome page section */
 
 #features-section {
   position: relative;
@@ -46,8 +53,6 @@ body {
 .feature-title {
   font-size: 1.5rem;
 }
-
-/* Register - Login Section */
 
 /* Stock Graph and Carousel Section */
 
@@ -114,4 +119,10 @@ body {
 
 .azure-background{
   background-color: azure;
+}
+
+/* Investments section */
+
+.buy-stock-form{
+  text-align: left;
 }

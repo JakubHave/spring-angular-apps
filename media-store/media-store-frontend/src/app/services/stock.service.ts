@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {Stock} from '../model/stock.model';
 import {HistoricPrice} from '../model/hystoric-price.model';
 import {map} from 'rxjs/operators';
 import {BaseService} from './base.service';
+import {GraphItem} from '../model/graph-item.model';
+import {DateValueItem} from '../model/date-value-item.model';
 
 const CORS_PROXY_URL = 'https://cors-middleman-jakub.herokuapp.com/';
 const EXTERNAL_STOCK_API_URL = CORS_PROXY_URL + 'https://api.tiingo.com/tiingo/daily/';
@@ -20,6 +22,54 @@ export class StockService extends BaseService {
   constructor(private http: HttpClient) {
     super();
   }
+
+  loadStocksFromDB(stockNames: string[]): Subject<GraphItem[]> {
+    const itemsSubject = new Subject<GraphItem[]>();
+    this.getStocksByNameFromDB(stockNames).subscribe(
+      res => {
+        const tempGraphItems = new Array<GraphItem>();
+        res.forEach((stock, index) => {
+          const series = new Array<DateValueItem>();
+          stock.prices.forEach(price => series.push(new DateValueItem(price.date, price.price)));
+          const graphItem = new GraphItem(stock.name, series);
+          tempGraphItems.push(graphItem);
+          if (index === res.length - 1 ) {
+            itemsSubject.next(tempGraphItems);
+          }
+        });
+      }
+    );
+    return itemsSubject;
+  }
+
+  loadStocksFromExtAndUpdate(stockNames: string[]): Subject<GraphItem[]> {
+    const itemsSubject = new Subject<GraphItem[]>();
+    const tempGraphItems = new Array<GraphItem>();
+    stockNames.forEach( (stockSymbolName, index) => {
+      this.getStock(stockSymbolName).subscribe( res2 => {
+          const stock = res2 as Stock;
+          const series = new Array<DateValueItem>();
+          stock.prices.forEach(price => series.push(new DateValueItem(price.date, price.price)));
+          this.getStockInfo(stock.symbol).subscribe( res3 => {
+              const stockFullName = res3 + ' (' + stock.symbol + ')';
+
+              // NOTE: update stock in DB
+              stock.name = stockFullName;
+              this.updateStock(stock).subscribe(res => console.log(res));
+
+              const graphItem = new GraphItem(stockFullName, series);
+              tempGraphItems.push(graphItem);
+              if (index === stockNames.length - 1 ) {
+                itemsSubject.next(tempGraphItems);
+              }
+            }
+          );
+        }
+      );
+    });
+    return itemsSubject;
+  }
+
 
   areStocksUpdated(): Observable<boolean> {
     return this.http.get(STOCK_API_URL + '/updated').pipe( map(

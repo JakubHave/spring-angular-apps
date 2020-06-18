@@ -16,6 +16,10 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CarouselModule} from 'ngx-bootstrap/carousel';
 import {ToastrModule} from 'ngx-toastr';
+import {BuyStockComponent} from './investments/buy-stock/buy-stock.component';
+import {MyStocksComponent} from './investments/my-stocks/my-stocks.component';
+import {CollapseModule} from "ngx-bootstrap/collapse";
+import {NgbTypeaheadModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -25,7 +29,9 @@ import {ToastrModule} from 'ngx-toastr';
     HomeComponent,
     ProfileComponent,
     AdminSiteComponent,
-    UserSiteComponent
+    UserSiteComponent,
+    BuyStockComponent,
+    MyStocksComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +42,9 @@ import {ToastrModule} from 'ngx-toastr';
     NgxChartsModule,
     BrowserAnimationsModule,
     CarouselModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    CollapseModule,
+    NgbTypeaheadModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

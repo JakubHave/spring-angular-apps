@@ -1,0 +1,97 @@
+<button *ngIf="isFormCollapsed" type="button" class="btn btn-primary" (click)="openForm()">
+  <span> Make a new investment</span>
+</button>
+
+<div class="card bg-light card-body mb-3" [collapse]="isFormCollapsed">
+  <!--  and lets make a template driven form now for the christs sake -->
+  <form  #stockForm="ngForm" (ngSubmit)="onSubmit(stockForm)">
+    <div class="row">
+      <div class="col-lg-6 col-md-6">
+        <div class="form-group buy-stock-form">
+          <label for="select-stock">Select a stock to buy</label>
+          <input
+            id="select-stock" type="text" class="form-control" name="name"
+            [(ngModel)]="model.name"
+            [ngbTypeahead]="search"
+            (focus)="focusSubject.next($any($event).target.value)"
+            (click)="clickSubject.next($any($event).target.value)"
+            (ngModelChange)="stockModelChanged($event)"
+            #instance="ngbTypeahead"
+            #name="ngModel"
+            required
+          />
+        </div>
+        <div *ngIf="name.invalid && (name.dirty || name.touched)"
+             class="alert alert-danger">
+          <div *ngIf="name.errors.required">
+            Stock field is required
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="form-group buy-stock-form">
+          <label for="select-stock">Investment in U.S. Dollars $</label>
+          <input
+            id="amount" type="text" class="form-control"  name="moneyNum"
+            [(ngModel)]="model.moneyNum"
+            (ngModelChange)="invModelChanged($event)"
+            #moneyNum="ngModel"
+            required pattern="^\d*\.?\d*$"
+          />
+        </div>
+        <div *ngIf="moneyNum.invalid && (moneyNum.dirty || moneyNum.touched)"
+             class="alert alert-danger">
+          <div *ngIf="moneyNum.errors.required">
+            Investment field is required
+          </div>
+          <div *ngIf="moneyNum.errors.pattern">
+            Investment must be a positive number
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 col-md-6">
+        <input
+          id="stockSymbol" type="hidden" class="form-control"  name="stockSymbol"
+          [(ngModel)]="model.stockSymbol"
+        />
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="form-group buy-stock-form">
+          <label for="select-stock">Share price in U.S. Dollars $</label>
+            <input
+              id="stockPrice" type="text" class="form-control" name="stockPrice"
+              readonly
+              [value]="sharePrice"
+            />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 col-md-6">
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="form-group buy-stock-form">
+          <label for="select-stock">Number of shares</label>
+          <input
+            id="sharesNum" type="text" class="form-control" name="sharesNum"
+            readonly
+            [(ngModel)]="model.sharesNum"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="text-left mt-3">
+      <button class="btn btn-primary" type="submit" [disabled]="!stockForm.form.valid">
+        Buy Stock
+      </button>
+      <button type="button" (click)="cancel(stockForm)" class="btn btn-secondary ml-3">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
