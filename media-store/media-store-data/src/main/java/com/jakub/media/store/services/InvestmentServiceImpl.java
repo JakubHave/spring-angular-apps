@@ -26,7 +26,7 @@ public class InvestmentServiceImpl implements InvestmentService {
         User user = investment.getUser();
         User userDB = userRepository.findByName(user.getName()).orElse(null);
         if(userDB==null) {
-            throw new RuntimeException("User with username: " + user.getName() + "does not exist.");
+            throw new RuntimeException("User with username: " + user.getName() + " does not exist.");
         }
         investment.setUser(userDB);
         Investment newInvestment =  investmentRepository.saveAndFlush(investment);
@@ -34,6 +34,7 @@ public class InvestmentServiceImpl implements InvestmentService {
         List<Investment> userInvestments = userDB.getInvestments();
         userInvestments.add(newInvestment);
         userDB.setInvestments(userInvestments);
+        userDB.setBalance(userDB.getBalance() - investment.getMoneyNum());
         userRepository.saveAndFlush(userDB);
 
         return newInvestment;
@@ -44,7 +45,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 
         User userDB = userRepository.findByName(username).orElse(null);
         if(userDB==null) {
-            throw new RuntimeException("User with username: " + username + "does not exist.");
+            throw new RuntimeException("User with username: " + username + " does not exist.");
         }
         return investmentRepository.findAllByUser(userDB);
     }
@@ -52,6 +53,10 @@ public class InvestmentServiceImpl implements InvestmentService {
     @Override
     public boolean removeInvestment(Long investmentId) {
 
+        Investment investment = investmentRepository.findById(investmentId).orElse(null);
+        if(investment==null) {
+            throw new RuntimeException("Investment with ID: " + investmentId + " does not exist.");
+        }
         investmentRepository.deleteById(investmentId);
         return true;
     }

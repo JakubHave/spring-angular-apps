@@ -21,6 +21,19 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping(path = "/{username}")
+    @PreAuthorize("hasRole('USER')")
+    public User getUser(@PathVariable("username") final String username) {
+        return userService.getUserByName(username);
+    }
+
+    @PutMapping(path = "/balance")
+    @PreAuthorize("hasRole('USER')")
+    public User updateBalance(@RequestBody final User user){
+
+        return userService.updateBalanceForUser(user);
+    }
+
     @GetMapping(path = "/all")
     @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllUsers() {
@@ -28,6 +41,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity removeUser(@PathVariable("username") final String username) {
 

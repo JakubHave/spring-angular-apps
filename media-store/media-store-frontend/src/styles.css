@@ -126,3 +126,24 @@ body {
 .buy-stock-form{
   text-align: left;
 }
+
+.my-account{
+  text-align: left;
+  padding:10px;
+  margin: 15px 0 15px;
+  border-radius: 5px;
+  background-color: #f0efef;
+  width: fit-content;
+}
+
+.ngb-popover-custom {
+  min-width: 350px !important;
+  min-height: 350px !important;
+  background-color: #ddf3f5;
+}
+
+.stock-graph{
+  width: 335px !important;
+  height: 335px !important;
+}
+

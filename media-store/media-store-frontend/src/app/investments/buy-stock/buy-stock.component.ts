@@ -11,6 +11,7 @@ import {GraphItem} from '../../model/graph-item.model';
 import {InvestService} from '../../services/invest.service';
 import {TokenStorageService} from '../../services/token-storage.service';
 import {User} from '../../model/user.model';
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-buy-stock',
@@ -21,7 +22,7 @@ export class BuyStockComponent implements OnInit {
 
   constructor(private stockService: StockService, private investService: InvestService,
               private storageService: TokenStorageService, private formBuilder: FormBuilder,
-              private toastr: ToastrService) {}
+              private toastr: ToastrService, private userService: UserService) {}
   @Output()
   newInvestment = new EventEmitter<Investment>();
 
@@ -98,16 +99,24 @@ export class BuyStockComponent implements OnInit {
     }
 
     const {username, email} = this.storageService.getUser();
-    const investment =  new Investment(name, stockSymbol, form.value.sharesNum, moneyNum, new User(username, email));
-    this.investService.makeInvestment(investment).subscribe(
+    this.userService.getUser(username).subscribe(
       res => {
-        this.newInvestment.emit(res);
-        this.toastr.success('Invested ' + moneyNum + ' $ to ' + name, 'Well done');
-      }, err => {
-        console.log(err);
-        this.toastr.error(err.message, 'Error');
-      }, () => {
-        this.cancel(form);
+        if (res.balance < moneyNum) {
+          this.toastr.error('You have only ' + res.balance +
+            ' $ left. Can not invest ' + moneyNum + ' $', 'Error');
+        } else {
+          const investment =  new Investment(name, stockSymbol, form.value.sharesNum, moneyNum, new User(username, email));
+          this.investService.makeInvestment(investment).subscribe(
+            res2 => {
+              this.newInvestment.emit(res2);
+              this.toastr.success('Invested ' + moneyNum + ' $ to ' + name, 'Well done');
+            }, err => {
+              this.toastr.error(err.message, 'Error');
+            }, () => {
+              this.cancel(form);
+            }
+          );
+        }
       }
     );
   }

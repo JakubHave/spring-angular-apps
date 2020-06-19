@@ -9,4 +9,8 @@ public interface UserService {
     List<User> getAllUsers();
 
     boolean removeUser(String username);
+
+    User getUserByName(String username);
+
+    User updateBalanceForUser(User user);
 }

@@ -48,6 +48,9 @@ public class User extends BaseEntityWithId {
     @JsonManagedReference
     private List<Investment> investments;
 
+    @Column(nullable = false)
+    private Double balance = 250000d;
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;

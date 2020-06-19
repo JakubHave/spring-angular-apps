@@ -35,9 +35,22 @@ export class UserService extends  BaseService {
     ));
   }
 
+  getUser(username: string): Observable<User> {
+    return this.http.get( USERS_API_URL + username).pipe( map(
+      response => this.convertResponseToObject(response, User.prototype)
+    ));
+  }
+
   removeUser(user: User): Observable<User> {
     return this.http.delete(USERS_API_URL + '/' + user.name ).pipe( map(
   response => this.convertResponseToObject(response, User.prototype)
   ));
+  }
+
+  updateBalanceForUser(user: User): Observable<User> {
+    user['roles'] = null;
+    return this.http.put( USERS_API_URL + 'balance', user).pipe( map(
+      response => this.convertResponseToObject(response, User.prototype)
+    ));
   }
 }

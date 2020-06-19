@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
   showYAxisLabel = true;
   showXAxisLabel = true;
   xAxisLabel = 'Date';
-  yAxisLabel = 'Price $';
+  yAxisLabel = 'U.S. Dollars';
   timeline = false;
 
   colorScheme = {

@@ -4,6 +4,8 @@ import {TokenStorageService} from '../../services/token-storage.service';
 import {Investment} from '../../model/investment.model';
 import {StockService} from '../../services/stock.service';
 import {ToastrService} from 'ngx-toastr';
+import {UserService} from '../../services/user.service';
+import {User} from '../../model/user.model';
 
 @Component({
   selector: 'app-my-stocks',
@@ -11,15 +13,21 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./my-stocks.component.css']
 })
 export class MyStocksComponent implements OnInit {
-  investments: Investment[];
+  investments = new Array<Investment>();
+  balance: number;
 
   constructor(private investService: InvestService, private storageService: TokenStorageService,
-              private stockService: StockService, private toastr: ToastrService) { }
+              private stockService: StockService, private userService: UserService,
+              private toastr: ToastrService) { }
 
   ngOnInit(): void {
     const {username} = this.storageService.getUser();
+    this.updateBalance();
     this.investService.getAllInvestmentsByUser(username).subscribe(
       investments => {
+        if (investments?.length === 0) {
+          return;
+        }
         this.stockService.getStocksByNameFromDB(investments.map(invest => invest.stockSymbol)).subscribe(
           stocks => {
             investments.forEach(invest => {
@@ -37,6 +45,12 @@ export class MyStocksComponent implements OnInit {
   sell(investment: Investment) {
     this.investService.removeInvestment(investment).subscribe(
       res => {
+        const { username, email } = this.storageService.getUser();
+        const user = new User(username, email);
+        user.balance = this.balance + investment.sharesNum * investment.stockPrice;
+        this.userService.updateBalanceForUser(user).subscribe(
+          res2 => this.balance = res2.balance
+        );
         this.investments = this.investments.filter(item => item.id !== investment.id);
         this.toastr.success('Sold ' + investment.sharesNum.toFixed(2) + ' shares of ' +
           investment.name + ' stock for ' + investment.actualInvestValue.toFixed(2) + ' $', 'Sold!');
@@ -47,6 +61,7 @@ export class MyStocksComponent implements OnInit {
   }
 
   onNewInvestment(investment: Investment) {
+    this.updateBalance();
     this.stockService.getStocksByNameFromDB([investment.stockSymbol]).subscribe(
       stocks => {
         const stockPrices = stocks[0].prices.map(histPrice => histPrice.price);
@@ -71,5 +86,14 @@ export class MyStocksComponent implements OnInit {
     let prefix = '';
     if (percent >= 0) { prefix = '+'; }
     return prefix + percent.toFixed(3) + '%';
+  }
+
+  private updateBalance() {
+    const {username} = this.storageService.getUser();
+    this.userService.getUser(username).subscribe(
+      res => {
+        this.balance = res.balance;
+      }
+    );
   }
 }

@@ -1,6 +1,8 @@
-<button *ngIf="isFormCollapsed" type="button" class="btn btn-primary" (click)="openForm()">
+<div *ngIf="isFormCollapsed" class="buy-stock-form">
+<button  type="button" class="btn btn-primary" (click)="openForm()">
   <span> Make a new investment</span>
 </button>
+</div>
 
 <div class="card bg-light card-body mb-3" [collapse]="isFormCollapsed">
   <!--  and lets make a template driven form now for the christs sake -->
