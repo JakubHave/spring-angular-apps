@@ -19,7 +19,7 @@ public class Stock extends BaseEntityWithId {
     @Column(nullable = false)
     private String symbol;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)

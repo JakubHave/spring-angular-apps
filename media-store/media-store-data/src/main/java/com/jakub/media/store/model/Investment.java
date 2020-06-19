@@ -6,19 +6,24 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.time.LocalDate;
 
 @Data
 @Entity
-public class HistoricPrice extends BaseEntityWithId {
+public class Investment extends BaseEntityWithId {
 
     @Column(nullable = false)
-    private LocalDate date;
+    private String name;
 
     @Column(nullable = false)
-    private Float price;
+    private String stockSymbol;
+
+    @Column(nullable = false)
+    private Double sharesNum;
+
+    @Column(nullable = false)
+    private Double moneyNum;
 
     @ManyToOne
     @JsonBackReference
-    private Stock stock;
+    private User user;
 }

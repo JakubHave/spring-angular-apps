@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
 import {merge, Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
@@ -9,6 +9,8 @@ import {Investment} from '../../model/investment.model';
 import {initStockNames} from '../../init-data/stock-data';
 import {GraphItem} from '../../model/graph-item.model';
 import {InvestService} from '../../services/invest.service';
+import {TokenStorageService} from '../../services/token-storage.service';
+import {User} from '../../model/user.model';
 
 @Component({
   selector: 'app-buy-stock',
@@ -18,7 +20,10 @@ import {InvestService} from '../../services/invest.service';
 export class BuyStockComponent implements OnInit {
 
   constructor(private stockService: StockService, private investService: InvestService,
-              private formBuilder: FormBuilder, private toastr: ToastrService) {}
+              private storageService: TokenStorageService, private formBuilder: FormBuilder,
+              private toastr: ToastrService) {}
+  @Output()
+  newInvestment = new EventEmitter<Investment>();
 
   isFormCollapsed = true;
   allGraphData = new Array<GraphItem>();
@@ -28,7 +33,7 @@ export class BuyStockComponent implements OnInit {
     amount: ['', Validators.required]
   });
 
-  model = new Investment(null, null, 0, 0);
+  model = new Investment(null, null, 0, 0, null);
 
   stockFullNames = initStockNames;
 
@@ -76,26 +81,33 @@ export class BuyStockComponent implements OnInit {
   }
 
   onSubmit(form: any) {
-    if (!initStockNames.includes(form.value.stockSymbol)) {
+    const stockSymbol = form.value.stockSymbol;
+    if (!initStockNames.includes(stockSymbol)) {
       this.toastr.error('Wrong stock name, please choose from the options in dropdown', 'Error');
       return;
     }
-    if (!this.stockFullNames.includes(form.value.name)) {
+    const name = form.value.name;
+    if (!this.stockFullNames.includes(name)) {
       this.toastr.error('Wrong stock name, please choose from the options in dropdown', 'Error');
       return;
     }
-    if (form.value.moneyNum <= 0) {
+    const moneyNum = form.value.moneyNum;
+    if (moneyNum <= 0) {
       this.toastr.error('Investment must be a positive number', 'Error');
       return;
     }
 
-    this.investService.makeInvestment(form.value).subscribe(
+    const {username, email} = this.storageService.getUser();
+    const investment =  new Investment(name, stockSymbol, form.value.sharesNum, moneyNum, new User(username, email));
+    this.investService.makeInvestment(investment).subscribe(
       res => {
-        this.toastr.success('Invested ' + form.value.moneyNum + ' $ to ' + form.value.name +
-          ' . Good choice', 'Success');
+        this.newInvestment.emit(res);
+        this.toastr.success('Invested ' + moneyNum + ' $ to ' + name, 'Well done');
       }, err => {
         console.log(err);
         this.toastr.error(err.message, 'Error');
+      }, () => {
+        this.cancel(form);
       }
     );
   }
@@ -107,7 +119,7 @@ export class BuyStockComponent implements OnInit {
   }
 
   private resetModel(model: Investment) {
-    model = new Investment(null, null, 0, 0);
+    model = new Investment(null, null, 0, 0, null);
   }
 
   stockModelChanged(stockName: string) {
