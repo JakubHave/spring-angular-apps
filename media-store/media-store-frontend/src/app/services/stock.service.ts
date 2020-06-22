@@ -55,7 +55,7 @@ export class StockService extends BaseService {
 
               // NOTE: update stock in DB
               stock.name = stockFullName;
-              this.updateStock(stock).subscribe(res => console.log(res));
+              this.updateStock(stock).subscribe();
 
               const graphItem = new GraphItem(stockFullName, series);
               tempGraphItems.push(graphItem);

@@ -49,14 +49,16 @@ export class HomeComponent implements OnInit {
           itemsSubject.subscribe({
             next: items => {
               this.allGraphData = items;
-              this.showStockGraph = true; }
+              setTimeout(() => this.showStockGraph = true, 1000);
+            }
           });
         } else {
           const itemsSubject = this.stockService.loadStocksFromExtAndUpdate(stockNames);
           itemsSubject.subscribe({
             next: items => {
               this.allGraphData = items;
-              this.showStockGraph = true; }
+              setTimeout(() => this.showStockGraph = true, 1000);
+            }
           });
         }
       }
